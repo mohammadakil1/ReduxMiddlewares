@@ -5,6 +5,7 @@ import {Provider} from 'react-redux';
 import store from './src/redux/store';
 import ThunkScreen from './src/screens/Redux/ThunkScreen';
 import Counter from './src/screens/Redux/Counter';
+import SagaScreen from './src/screens/Redux/SagaScreen';
 
 const App = () => {
   // useEffect(() => {
@@ -17,7 +18,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <Counter />
-      <ThunkScreen />
+      <SagaScreen />
     </Provider>
   );
 };

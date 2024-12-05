@@ -1,7 +1,12 @@
-import { applyMiddleware, createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 import rootReducer from './reducers';
-import { thunk } from 'redux-thunk';
+import watchFetchData from './sagas';
+
+const sagaMiddleware = createSagaMiddleware();
 //@ts-ignore
-const store = createStore(rootReducer,applyMiddleware(thunk));
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(watchFetchData);
 
 export default store;
