@@ -1,36 +1,55 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect} from 'react';
 import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from '@tanstack/react-query';
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect} from 'react';
+import {styles} from './styles';
+import axios from 'axios';
+import {useQuery} from '@tanstack/react-query';
 
-const queryClient = new QueryClient();
-
-const FetchData = () => {
-  const {data, error, isLoading} = useQuery('fetchData', () =>
-    fetch('https://api.example.com/data').then(res => res.json()),
-  );
-
-  if (isLoading) return <Text>Loading...</Text>;
-  if (error) return <Text>Error: {error.message}</Text>;
-
-  return (
-    <View>
-      {data?.map((user: any) => (
-        <Text key={user.id}>{user.name}</Text>
-      ))}
-    </View>
-  );
+const fetchPosts = async () => {
+  const {data} = await axios.get('https://jsonplaceholder.typicode.com/posts');
+  return data;
 };
 
 const ReactQuery = () => {
+  const {data, isLoading, error} = useQuery({
+    queryFn: () => fetchPosts(),
+    queryKey: ['posts'],
+  });
+
+  if (isLoading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.error}>Error: {error.message}</Text>
+      </View>
+    );
+  }
+
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <Text style={{color: 'white'}}>ReactQuery</Text> */}
-      <FetchData />
-    </QueryClientProvider>
+    <SafeAreaView>
+      <FlatList
+        data={data}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => (
+          <View style={styles.card}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.body}>{item.body}</Text>
+          </View>
+        )}
+      />
+    </SafeAreaView>
   );
 };
 
