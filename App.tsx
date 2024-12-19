@@ -8,6 +8,9 @@ import Counter from './src/screens/Redux/Counter';
 import SagaScreen from './src/screens/Redux/SagaScreen';
 import ReactQuery from './src/screens/APIs/ReactQuery';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {CounterProvider} from './src/contexts/CounterContext';
+import CounterDisplay from './src/screens/Contexts/CounterDisplay';
+import CounterControls from './src/screens/Contexts/CounterControls';
 
 const queryClient = new QueryClient();
 const App = () => {
@@ -26,9 +29,15 @@ const App = () => {
     // <SafeAreaView>    // APIs hit
     //   <Fetch/>
     // </SafeAreaView>
-    <QueryClientProvider client={queryClient}>    // API hit by ReactQuery
-      <ReactQuery />
-    </QueryClientProvider>
+    // <QueryClientProvider client={queryClient}>   // API hit by ReactQuery
+    //   <ReactQuery />
+    // </QueryClientProvider>
+    <CounterProvider>   // ContextAPI
+      <SafeAreaView>
+        <CounterDisplay />
+        <CounterControls />
+      </SafeAreaView>
+    </CounterProvider>
   );
 };
 
